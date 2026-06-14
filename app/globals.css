@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --border: #e8e8ea;
+  --text: #0a0a0b;
+  --muted: #6b6b73;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-feature-settings: "palt" 1;
+  letter-spacing: 0.01em;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+  .container-wide {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  /* Subtle grid / dot backdrop for hero sections */
+  .hero-grid {
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(10, 10, 11, 0.06) 1px, transparent 0);
+    background-size: 28px 28px;
+  }
+  .hero-dark {
+    background:
+      radial-gradient(1200px 500px at 50% -10%, rgba(255, 255, 255, 0.08), transparent 60%),
+      linear-gradient(180deg, #0a0a0b 0%, #131316 100%);
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-ink-700/30 bg-white/60 px-3 py-1 text-xs font-medium uppercase tracking-wider text-ink-600 backdrop-blur;
+  }
+
+  .link-quiet {
+    @apply text-ink-600 transition-colors hover:text-ink-950;
+  }
+
+  .card-grid {
+    @apply grid gap-4 sm:gap-5;
+  }
+
+  /* thin scrollbar for tables */
+  .scroll-thin::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  .scroll-thin::-webkit-scrollbar-thumb {
+    background: #d4d4d8;
+    border-radius: 999px;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .bg-dots {
+    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.12) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+}

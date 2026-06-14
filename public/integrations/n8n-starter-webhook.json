@@ -1,0 +1,22 @@
+{
+  "name": "AIリード - スターター(疎通確認)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-lead-ops",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "c0a10000-0000-4000-8000-000000000001",
+      "name": "Webhook: 問い合わせ受信",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [380, 300],
+      "webhookId": "ai-lead-ops"
+    }
+  ],
+  "connections": {},
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

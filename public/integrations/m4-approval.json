@@ -1,0 +1,127 @@
+{
+  "name": "M4 練習 - 送信前に人間が承認",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a4a10000-0000-4000-8000-000000000001",
+      "name": "手動トリガー",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 340]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:4321/api/analyze-inquiry",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"company_name\": \"やまと総合法務事務所\",\n  \"contact_name\": \"山本\",\n  \"source\": \"メール\",\n  \"budget\": \"5万〜10万円\",\n  \"desired_timeline\": \"情報収集中\",\n  \"message\": \"相続や会社設立の問い合わせ対応を自動化したいが、士業なので断定的な返信は避けたい。\"\n}",
+        "options": {}
+      },
+      "id": "a4a10000-0000-4000-8000-000000000002",
+      "name": "HTTP Request: AI分析(下書き生成)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 340]
+    },
+    {
+      "parameters": {
+        "resume": "form",
+        "formTitle": "送信前の承認",
+        "formDescription": "AIが作った返信文案を送る前に確認してください",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "判断",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  { "option": "承認" },
+                  { "option": "却下" }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a4a10000-0000-4000-8000-000000000003",
+      "name": "🛑 人間の承認待ち",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [680, 340]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "c-approved",
+              "leftValue": "={{ $json['判断'] }}",
+              "rightValue": "承認",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a4a10000-0000-4000-8000-000000000004",
+      "name": "IF: 承認された?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [900, 340]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "r1", "name": "結果", "value": "✅ 承認 → 返信を送信しました", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a4a10000-0000-4000-8000-000000000005",
+      "name": "送信した(ダミー)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1140, 240]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "r2", "name": "結果", "value": "🚫 却下 → 送信せず保留", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a4a10000-0000-4000-8000-000000000006",
+      "name": "却下した(保留)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1140, 440]
+    }
+  ],
+  "connections": {
+    "手動トリガー": {
+      "main": [[{ "node": "HTTP Request: AI分析(下書き生成)", "type": "main", "index": 0 }]]
+    },
+    "HTTP Request: AI分析(下書き生成)": {
+      "main": [[{ "node": "🛑 人間の承認待ち", "type": "main", "index": 0 }]]
+    },
+    "🛑 人間の承認待ち": {
+      "main": [[{ "node": "IF: 承認された?", "type": "main", "index": 0 }]]
+    },
+    "IF: 承認された?": {
+      "main": [
+        [{ "node": "送信した(ダミー)", "type": "main", "index": 0 }],
+        [{ "node": "却下した(保留)", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

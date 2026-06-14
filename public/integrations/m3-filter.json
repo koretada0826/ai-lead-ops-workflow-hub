@@ -1,0 +1,79 @@
+{
+  "name": "M3 練習 - 要対応リードに絞る",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "days", "triggerAtHour": 9 } ] }
+      },
+      "id": "f3b10000-0000-4000-8000-000000000001",
+      "name": "⏰ 毎朝9時",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [300, 320]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://localhost:4321/api/inquiries",
+        "options": {}
+      },
+      "id": "f3b10000-0000-4000-8000-000000000002",
+      "name": "HTTP Request: リード一覧を取得(GET)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 320]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "inquiries",
+        "options": {}
+      },
+      "id": "f3b10000-0000-4000-8000-000000000003",
+      "name": "✂️ リストをバラす",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [740, 320]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "c-lead-high",
+              "leftValue": "={{ $json.lead_score }}",
+              "rightValue": "高",
+              "operator": { "type": "string", "operation": "equals" }
+            },
+            {
+              "id": "c-status-new",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "未対応",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f3b10000-0000-4000-8000-000000000004",
+      "name": "🪣 絞り込み: 高見込み×未対応",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [960, 320]
+    }
+  ],
+  "connections": {
+    "⏰ 毎朝9時": {
+      "main": [[{ "node": "HTTP Request: リード一覧を取得(GET)", "type": "main", "index": 0 }]]
+    },
+    "HTTP Request: リード一覧を取得(GET)": {
+      "main": [[{ "node": "✂️ リストをバラす", "type": "main", "index": 0 }]]
+    },
+    "✂️ リストをバラす": {
+      "main": [[{ "node": "🪣 絞り込み: 高見込み×未対応", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

@@ -1,0 +1,83 @@
+{
+  "name": "AIリード対応ワークフロー - Make / Zapier シナリオ",
+  "description": "問い合わせWebhook → ルーター(見込み度) → Google Sheets / Slack / Chatwork / CRM。Make の Blueprint と Zapier の Zap 構成を併記。",
+  "make_blueprint": {
+    "name": "AI Lead Ops - Intake Router",
+    "flow": [
+      {
+        "module": "webhooks:CustomWebHook",
+        "label": "問い合わせ受信",
+        "mapper": {}
+      },
+      {
+        "module": "builtin:BasicRouter",
+        "label": "見込み度で分岐",
+        "routes": [
+          {
+            "filter": {
+              "name": "高見込み",
+              "conditions": [[{ "a": "{{1.lead_score}}", "o": "text:equal", "b": "高" }]]
+            },
+            "flow": [
+              {
+                "module": "slack:CreateMessage",
+                "label": "Slack 強調通知",
+                "mapper": {
+                  "channel": "{{env.SLACK_CHANNEL}}",
+                  "text": ":fire: 高見込みリード {{1.company_name}} / {{1.category}}\n{{1.summary}}"
+                }
+              },
+              {
+                "module": "hubspot:CreateContact",
+                "label": "CRMへ登録",
+                "mapper": {
+                  "email": "{{1.email}}",
+                  "company": "{{1.company_name}}",
+                  "lifecyclestage": "salesqualifiedlead"
+                }
+              }
+            ]
+          },
+          {
+            "filter": null,
+            "flow": [
+              {
+                "module": "slack:CreateMessage",
+                "label": "Slack 通常通知",
+                "mapper": {
+                  "channel": "{{env.SLACK_CHANNEL}}",
+                  "text": "新規問い合わせ {{1.company_name}} / 見込み{{1.lead_score}}"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "module": "google-sheets:addRow",
+        "label": "Sheets 1行追加",
+        "mapper": {
+          "spreadsheetId": "{{env.LEAD_SHEET_ID}}",
+          "sheetName": "問い合わせ一覧",
+          "values": {
+            "日時": "{{1.created_at}}",
+            "会社名": "{{1.company_name}}",
+            "流入元": "{{1.source}}",
+            "見込み度": "{{1.lead_score}}",
+            "要約": "{{1.summary}}"
+          }
+        }
+      }
+    ]
+  },
+  "zapier_zap": {
+    "trigger": { "app": "Webhooks by Zapier", "event": "Catch Hook" },
+    "actions": [
+      { "app": "Filter by Zapier", "event": "Only continue if lead_score = 高 (高見込み枝)" },
+      { "app": "Slack", "event": "Send Channel Message", "note": "高見込みは強調文面" },
+      { "app": "Google Sheets", "event": "Create Spreadsheet Row" },
+      { "app": "Chatwork", "event": "Send Message", "note": "担当ルームへ通知" }
+    ],
+    "notes": "Zapier の Paths で見込み度別に分岐。CRM(HubSpot/Salesforce)アクションを追加可能。"
+  }
+}

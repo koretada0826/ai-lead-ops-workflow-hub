@@ -1,0 +1,67 @@
+{
+  "name": "M2 練習 - AIで分析して分岐する",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e2a10000-0000-4000-8000-000000000001",
+      "name": "手動トリガー",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [320, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:4321/api/analyze-inquiry",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"company_name\": \"株式会社テスト商事\",\n  \"contact_name\": \"山田\",\n  \"source\": \"広告\",\n  \"budget\": \"30万〜50万円\",\n  \"desired_timeline\": \"すぐに相談したい\",\n  \"message\": \"広告リードの自動分類とSlack通知を至急作りたい。営業リスト作成も手作業で困ってる。\"\n}",
+        "options": {}
+      },
+      "id": "e2a10000-0000-4000-8000-000000000002",
+      "name": "HTTP Request: AIに分析を依頼",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [560, 320]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "cond-leadscore-high",
+              "leftValue": "={{ $json.lead_score }}",
+              "rightValue": "高",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e2a10000-0000-4000-8000-000000000003",
+      "name": "IF: 見込み度は高?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [820, 320]
+    }
+  ],
+  "connections": {
+    "手動トリガー": {
+      "main": [[{ "node": "HTTP Request: AIに分析を依頼", "type": "main", "index": 0 }]]
+    },
+    "HTTP Request: AIに分析を依頼": {
+      "main": [[{ "node": "IF: 見込み度は高?", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}
