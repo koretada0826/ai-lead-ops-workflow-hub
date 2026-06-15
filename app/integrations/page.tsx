@@ -131,6 +131,46 @@ export default function IntegrationsPage() {
     },
   ];
 
+  const useCases = [
+    {
+      group: "営業・マーケ",
+      items: [
+        "問い合わせの自動分類・即時通知",
+        "広告レポート自動生成＋AIコメント",
+        "営業リストの整形・名寄せ",
+        "資料請求後の段階フォロー",
+        "フォーム→CRM(HubSpot等)自動登録",
+      ],
+    },
+    {
+      group: "バックオフィス",
+      items: [
+        "請求書・領収書のデータ抽出→Sheets",
+        "受発注メールの自動仕分け・起票",
+        "経費・勤怠の集計と通知",
+        "契約・申込フローの自動化",
+      ],
+    },
+    {
+      group: "データ・監視",
+      items: [
+        "競合価格・在庫の定期監視→アラート",
+        "検索順位/GA4の定期取得→レポート",
+        "Webスクレイピングでリスト収集",
+        "異常を検知して担当へ通知",
+      ],
+    },
+    {
+      group: "AI・コミュニケーション",
+      items: [
+        "長文の要約・分類・タグ付け",
+        "メール下書きの自動生成",
+        "Slack/Chatwork/LINE自動通知",
+        "FAQ・社内ナレッジボット(Dify)",
+      ],
+    },
+  ];
+
   return (
     <div className="container-wide py-12 sm:py-16">
       <div className="max-w-3xl">
@@ -218,6 +258,38 @@ export default function IntegrationsPage() {
         <p className="mt-6 text-sm leading-relaxed text-ink-600">
           <span className="font-medium text-ink-800">扱える n8n ノード / パターン：</span>
           Webhook / HTTP Request / IF・Switch / 式(expression) / Schedule / Split Out / Filter / Merge / Wait(human-in-the-loop) / Error Trigger / Code / Google Sheets / Slack / Chatwork / CRM連携 …
+        </p>
+      </section>
+
+      {/* 対応できる業務自動化（ユースケース幅） */}
+      <section className="mt-16">
+        <SectionHeading
+          eyebrow="対応できる自動化"
+          title="同じ部品の組み合わせで、これだけ自動化できる"
+          description="上のワークフローは代表サンプル。Webhook・API・条件分岐・定期実行・AI呼び出し・人間承認といった部品を組み替えれば、業務に合わせて作れます。ほんの一例："
+        />
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {useCases.map((cat) => (
+            <div
+              key={cat.group}
+              className="rounded-2xl border border-ink-700/10 bg-white/70 p-5 ring-1 ring-ink-700/5 backdrop-blur"
+            >
+              <h3 className="text-sm font-semibold text-sky-700">
+                {cat.group}
+              </h3>
+              <ul className="mt-3 space-y-2">
+                {cat.items.map((it) => (
+                  <li key={it} className="flex gap-2 text-sm text-ink-700">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" />
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p className="mt-5 text-sm text-ink-600">
+          「うちのこの作業、自動化できる？」——だいたいできます。まずはお気軽にご相談ください。
         </p>
       </section>
 
