@@ -52,6 +52,12 @@ export async function POST(req: Request) {
   } catch {
     return NextResponse.json({ error: "JSONが不正です。" }, { status: 400 });
   }
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json(
+      { error: "リクエストボディはオブジェクトである必要があります。" },
+      { status: 400 }
+    );
+  }
   const query = (body.query || "").toString();
 
   const hasDify =

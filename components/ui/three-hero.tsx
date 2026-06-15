@@ -50,9 +50,9 @@ export function ThreeHero({ className }: { className?: string }) {
     const tex = new THREE.CanvasTexture(canvas);
 
     // 点グリッド（波打つ面）
-    const GX = 120;
-    const GZ = 120;
-    const SP = 0.92;
+    const GX = 90;
+    const GZ = 90;
+    const SP = 1.2;
     const count = GX * GZ;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
@@ -124,8 +124,9 @@ export function ThreeHero({ className }: { className?: string }) {
 
     const clock = new THREE.Clock();
     let raf = 0;
+    let lastDraw = 0;
     const arr = posAttr.array as Float32Array;
-    function frame() {
+    function draw() {
       const t = clock.getElapsedTime();
       for (let k = 0; k < count; k++) {
         const x = base[k * 2];
@@ -145,9 +146,19 @@ export function ThreeHero({ className }: { className?: string }) {
       camera.lookAt(0, 0, 0);
 
       renderer.render(scene, camera);
-      if (!reduce) raf = requestAnimationFrame(frame);
     }
-    raf = requestAnimationFrame(frame);
+    if (reduce) {
+      draw(); // 動きオフ設定なら静止1フレームのみ
+    } else {
+      const loop = (now: number) => {
+        raf = requestAnimationFrame(loop);
+        if (now - lastDraw < 33) return; // 約30fpsに制限（負荷半減）
+        if (typeof document !== "undefined" && document.hidden) return; // タブ非表示時は描画停止
+        lastDraw = now;
+        draw();
+      };
+      raf = requestAnimationFrame(loop);
+    }
 
     return () => {
       cancelAnimationFrame(raf);

@@ -57,6 +57,14 @@ export function InquiryForm() {
       if (!res.ok) {
         throw new Error(data.error || "送信に失敗しました。");
       }
+      // サーバーレスで保存が別インスタンスに無くても結果を表示できるよう控える
+      try {
+        if (data.inquiry) {
+          sessionStorage.setItem(`inq:${data.id}`, JSON.stringify(data.inquiry));
+        }
+      } catch {
+        /* sessionStorage非対応環境は無視 */
+      }
       router.push(`/demo/result/${data.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "送信に失敗しました。");

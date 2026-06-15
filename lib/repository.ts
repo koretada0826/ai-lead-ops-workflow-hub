@@ -194,7 +194,7 @@ export async function listLogs(inquiry_id: string): Promise<WorkflowLog[]> {
 
 // ---- ダッシュボード集計 ----------------------------------------------
 export function computeStats(inquiries: Inquiry[]): DashboardStats {
-  const now = new Date("2026-06-13T01:00:00.000Z");
+  const now = new Date();
   const monthKey = `${now.getUTCFullYear()}-${now.getUTCMonth()}`;
 
   const bySource: Record<string, number> = {};

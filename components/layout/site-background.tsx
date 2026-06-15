@@ -1,6 +1,12 @@
 "use client";
 
-import { ThreeHero } from "@/components/ui/three-hero";
+import dynamic from "next/dynamic";
+
+// Three.js は重いので遅延ロード（初期/layoutチャンクから分離。SSRなし）
+const ThreeHero = dynamic(
+  () => import("@/components/ui/three-hero").then((m) => m.ThreeHero),
+  { ssr: false }
+);
 
 /**
  * サイト全体の共通背景（固定）。

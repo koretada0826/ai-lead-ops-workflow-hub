@@ -31,6 +31,19 @@ export default async function DashboardPage() {
         <ButtonLink href="/demo/inquiry">新規問い合わせを追加</ButtonLink>
       </div>
 
+      {!cfg.hasSupabase && (
+        <div className="mt-6 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm text-amber-900 backdrop-blur">
+          <span className="mt-0.5 shrink-0 rounded-md bg-amber-200/70 px-1.5 py-0.5 text-[11px] font-bold">
+            DEMO
+          </span>
+          <p>
+            これは<span className="font-semibold">デモ環境</span>です。表示中の件数・数値は
+            <span className="font-semibold">サンプルデータ</span>であり、実際の業務数値ではありません。
+            本番ではSupabaseに接続し、実データで同じ画面が動きます。
+          </p>
+        </div>
+      )}
+
       {/* Summary cards */}
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <Stat label="総問い合わせ数" value={stats.total} />

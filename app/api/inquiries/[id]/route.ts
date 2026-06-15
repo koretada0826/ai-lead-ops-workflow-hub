@@ -29,6 +29,13 @@ export async function PATCH(
     return NextResponse.json({ error: "JSONが不正です。" }, { status: 400 });
   }
 
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json(
+      { error: "リクエストボディはオブジェクトである必要があります。" },
+      { status: 400 }
+    );
+  }
+
   const patch: { status?: InquiryStatus; internal_note?: string } = {};
   if (typeof body.status === "string") {
     if (!STATUSES.includes(body.status as InquiryStatus)) {

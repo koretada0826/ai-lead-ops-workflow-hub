@@ -30,6 +30,13 @@ export async function POST(req: Request) {
     );
   }
 
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json(
+      { error: "リクエストボディはオブジェクトである必要があります。" },
+      { status: 400 }
+    );
+  }
+
   const input = toInput(body);
   if (!input.message.trim()) {
     return NextResponse.json(

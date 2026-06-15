@@ -13,7 +13,6 @@ const COLS = [
     links: [
       { href: "/demo/inquiry", label: "問い合わせデモ" },
       { href: "/dashboard", label: "管理ダッシュボード" },
-      { href: "/reports", label: "レポート" },
       { href: "/workflow", label: "ワークフロー可視化" },
       { href: "/integrations", label: "連携・実装サンプル" },
       { href: "/dify-demo", label: "Dify連携デモ" },

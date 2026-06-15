@@ -102,7 +102,7 @@ export function N8nSimulator() {
       </div>
 
       {/* nodes */}
-      <div className="mt-5 grid grid-cols-4 gap-x-3 gap-y-3">
+      <div className="mt-5 grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-4">
         {[0, 1, 2, 3].map((col) => (
           <div key={col} className="space-y-3">
             {NODES.filter((n) => n.col === col).map((n) => (

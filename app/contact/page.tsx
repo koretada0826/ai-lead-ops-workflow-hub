@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/section";
 import { InquiryForm } from "@/components/inquiry/inquiry-form";
+import { AUTHOR_EMAIL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "お問い合わせ",
@@ -32,6 +33,16 @@ export default function ContactPage() {
                 </span>
                 送信すると、ご相談内容をAIが分類・見込み度判定し、返信文案の生成まで実行します。自社の問い合わせ対応をそのまま自動化している構成です。
               </p>
+            </div>
+            <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50/70 px-4 py-3 text-sm text-amber-900">
+              ⚠️ これは<span className="font-semibold">デモ</span>のため、フォーム送信では返信は届きません。実際のご相談は
+              <a
+                href={`mailto:${AUTHOR_EMAIL}`}
+                className="mx-1 font-semibold text-amber-900 underline underline-offset-2"
+              >
+                {AUTHOR_EMAIL}
+              </a>
+              まで直接ご連絡ください。
             </div>
           </CardContent>
         </Card>

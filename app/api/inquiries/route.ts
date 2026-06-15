@@ -44,6 +44,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "JSONが不正です。" }, { status: 400 });
   }
 
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json(
+      { error: "リクエストボディはオブジェクトである必要があります。" },
+      { status: 400 }
+    );
+  }
+
   const input = toInput(body);
   if (!input.company_name.trim() || !input.message.trim()) {
     return NextResponse.json(

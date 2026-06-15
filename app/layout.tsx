@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   description:
     "問い合わせ対応・営業リード管理をAIで自動化。HP・LP・広告・資料請求フォームから届いた問い合わせをAIが自動で分類し、見込み度判定・返信文案生成・Slack通知・Google Sheets保存まで一気通貫で実装します。",
-  metadataBase: new URL("https://ai-lead-ops.example.com"),
+  metadataBase: new URL("https://ai-lead-ops-workflow-hub.vercel.app"),
   openGraph: {
     title: "AIリード対応ワークフロー | AI Lead Ops Workflow Hub",
     description:

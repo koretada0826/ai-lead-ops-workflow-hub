@@ -45,7 +45,13 @@ function Row({
 }
 
 /** 外部連携ステータス（ログ風）の表示。 */
-export function IntegrationStatus({ inquiry }: { inquiry: Inquiry }) {
+export function IntegrationStatus({
+  inquiry,
+  hasSupabase = false,
+}: {
+  inquiry: Inquiry;
+  hasSupabase?: boolean;
+}) {
   const n8nTone: Tone = inquiry.n8n_webhook_error
     ? "error"
     : inquiry.n8n_webhook_sent
@@ -61,7 +67,11 @@ export function IntegrationStatus({ inquiry }: { inquiry: Inquiry }) {
 
   return (
     <div className="divide-y divide-ink-700/8">
-      <Row label="Supabase 保存" tone="success" status="保存済み" />
+      <Row
+        label="データ保存"
+        tone={hasSupabase ? "success" : "skipped"}
+        status={hasSupabase ? "Supabase保存済み" : "インメモリ（デモ）"}
+      />
       <Row label="n8n Webhook 送信" tone={n8nTone} status={n8nStatus} />
       <Row
         label="Google Sheets 追加"

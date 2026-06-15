@@ -278,9 +278,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 実装サンプル / レポート 訴求 */}
+      {/* 実装サンプル 訴求 */}
       <section className="container-page py-12">
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4">
           <Reveal className="h-full">
           <Card className="relative h-full overflow-hidden hover:-translate-y-1.5 hover:ring-sky-300/60">
             <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
@@ -313,37 +313,6 @@ export default function HomePage() {
           </Card>
           </Reveal>
 
-          <Reveal delay={120} className="h-full">
-          <Card className="relative h-full overflow-hidden hover:-translate-y-1.5 hover:ring-sky-300/60">
-            <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
-            <div className="p-7">
-              <Eyebrow>レポート自動化</Eyebrow>
-              <h3 className="mt-3 text-xl font-semibold text-ink-950">
-                蓄積データを商談化レポートに
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-600">
-                商談化ファネル、流入元別の高見込み率、見込み度分布、週次トレンドを自動集計。月次報告やクライアント共有にそのまま使えます。
-              </p>
-              <div className="mt-4 flex flex-wrap gap-1.5">
-                {["ファネル", "流入元ROI", "見込み度分布", "週次トレンド", "AIコメント"].map(
-                  (t) => (
-                    <span
-                      key={t}
-                      className="rounded-md bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-ink-700"
-                    >
-                      {t}
-                    </span>
-                  )
-                )}
-              </div>
-              <div className="mt-5">
-                <ButtonLink href="/reports" size="sm" variant="secondary">
-                  レポートを見る →
-                </ButtonLink>
-              </div>
-            </div>
-          </Card>
-          </Reveal>
         </div>
       </section>
 

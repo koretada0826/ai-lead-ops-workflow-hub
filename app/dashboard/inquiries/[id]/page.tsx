@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/badge";
 import { CopyCard } from "@/components/ui/copy-card";
 import { IntegrationStatus } from "@/components/inquiry/integration-status";
+import { getRuntimeConfig } from "@/lib/constants";
 import { ManagePanel } from "@/components/dashboard/manage-panel";
 import { WorkflowLogTimeline } from "@/components/dashboard/workflow-log";
 import { getInquiry, listLogs } from "@/lib/repository";
@@ -154,7 +155,10 @@ export default async function InquiryDetailPage({
                 外部連携ステータス
               </h2>
               <div className="mt-3">
-                <IntegrationStatus inquiry={inquiry} />
+                <IntegrationStatus
+                  inquiry={inquiry}
+                  hasSupabase={getRuntimeConfig().hasSupabase}
+                />
               </div>
             </CardContent>
           </Card>
