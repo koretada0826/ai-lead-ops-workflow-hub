@@ -95,6 +95,7 @@ export default function IntegrationsPage() {
       desc: "問い合わせ受信 → 項目整形 → 見込み度で分岐 → Sheets追記＋Slack通知。失敗時は管理者へ自動通知。",
       nodes: ["Webhook", "Set", "IF", "Google Sheets", "Slack", "Error Trigger"],
       use: "問い合わせ受付の本体フロー",
+      shot: "",
     },
     {
       file: "m1-http-demo.json",
@@ -102,6 +103,7 @@ export default function IntegrationsPage() {
       desc: "n8n自身が外部AI（Claude/API）に分析を依頼し、結果を受け取る。",
       nodes: ["Manual Trigger", "HTTP Request"],
       use: "あらゆるAPI / AI連携の基礎",
+      shot: "m1.png",
     },
     {
       file: "m2-ai-branch.json",
@@ -109,6 +111,7 @@ export default function IntegrationsPage() {
       desc: "AIの見込み度判定（lead_score）で処理を自動ルーティング。",
       nodes: ["HTTP Request", "IF", "式 {{ }}"],
       use: "高見込みリードだけ特別対応",
+      shot: "m2.png",
     },
     {
       file: "m3-filter.json",
@@ -116,6 +119,7 @@ export default function IntegrationsPage() {
       desc: "定期実行で一覧取得 → 個別化 → 「高見込み×未対応」だけ抽出。",
       nodes: ["Schedule", "HTTP Request", "Split Out", "Filter"],
       use: "日次ダイジェスト・追客抽出",
+      shot: "m3.png",
     },
     {
       file: "m4-approval.json",
@@ -123,6 +127,7 @@ export default function IntegrationsPage() {
       desc: "AIが下書き → 承認フォームで一時停止 → 人間の承認/却下で送信を制御。",
       nodes: ["HTTP Request", "Wait（承認フォーム）", "IF"],
       use: "士業・採用・不動産の安全運用",
+      shot: "m4.png",
     },
   ];
 
@@ -166,6 +171,22 @@ export default function IntegrationsPage() {
           {builtN8n.map((w) => (
             <Card key={w.file} className="relative overflow-hidden p-6 hover:-translate-y-1 hover:ring-sky-300/60">
               <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
+              {w.shot && (
+                <a
+                  href={`/integrations/screenshots/${w.shot}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mb-4 block overflow-hidden rounded-xl border border-ink-700/10 bg-zinc-50 ring-1 ring-ink-700/5 transition-transform duration-300 group-hover:scale-[1.02]"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/integrations/screenshots/${w.shot}`}
+                    alt={`${w.title} の実行画面`}
+                    className="w-full"
+                    loading="lazy"
+                  />
+                </a>
+              )}
               <h3 className="text-base font-semibold text-ink-950">{w.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink-600">
                 {w.desc}
