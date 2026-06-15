@@ -88,6 +88,44 @@ export default function IntegrationsPage() {
     body: readArtifact(a.file),
   }));
 
+  const builtN8n = [
+    {
+      file: "n8n-lead-workflow.json",
+      title: "リード受付フロー（完成版）",
+      desc: "問い合わせ受信 → 項目整形 → 見込み度で分岐 → Sheets追記＋Slack通知。失敗時は管理者へ自動通知。",
+      nodes: ["Webhook", "Set", "IF", "Google Sheets", "Slack", "Error Trigger"],
+      use: "問い合わせ受付の本体フロー",
+    },
+    {
+      file: "m1-http-demo.json",
+      title: "n8nからAIを呼ぶ（HTTP Request）",
+      desc: "n8n自身が外部AI（Claude/API）に分析を依頼し、結果を受け取る。",
+      nodes: ["Manual Trigger", "HTTP Request"],
+      use: "あらゆるAPI / AI連携の基礎",
+    },
+    {
+      file: "m2-ai-branch.json",
+      title: "AI分析 → 自動分岐",
+      desc: "AIの見込み度判定（lead_score）で処理を自動ルーティング。",
+      nodes: ["HTTP Request", "IF", "式 {{ }}"],
+      use: "高見込みリードだけ特別対応",
+    },
+    {
+      file: "m3-filter.json",
+      title: "毎朝の要対応リスト抽出",
+      desc: "定期実行で一覧取得 → 個別化 → 「高見込み×未対応」だけ抽出。",
+      nodes: ["Schedule", "HTTP Request", "Split Out", "Filter"],
+      use: "日次ダイジェスト・追客抽出",
+    },
+    {
+      file: "m4-approval.json",
+      title: "送信前に人間が承認（human-in-the-loop）",
+      desc: "AIが下書き → 承認フォームで一時停止 → 人間の承認/却下で送信を制御。",
+      nodes: ["HTTP Request", "Wait（承認フォーム）", "IF"],
+      use: "士業・採用・不動産の安全運用",
+    },
+  ];
+
   return (
     <div className="container-wide py-12 sm:py-16">
       <div className="max-w-3xl">
@@ -116,6 +154,51 @@ export default function IntegrationsPage() {
       <div className="mt-10">
         <N8nSimulator />
       </div>
+
+      {/* 実際に作って動かした n8n ワークフロー */}
+      <section className="mt-16">
+        <SectionHeading
+          eyebrow="n8n 実装力"
+          title="実際に構築・実行した n8n ワークフロー"
+          description="どれもインポートしてすぐ動く実物。Webhook受信・AI呼び出し・条件分岐・定期実行・人間承認まで、案件で必要なパターンを一通り網羅しています。"
+        />
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          {builtN8n.map((w) => (
+            <Card key={w.file} className="relative overflow-hidden p-6 hover:-translate-y-1 hover:ring-sky-300/60">
+              <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
+              <h3 className="text-base font-semibold text-ink-950">{w.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-600">
+                {w.desc}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {w.nodes.map((nd) => (
+                  <span
+                    key={nd}
+                    className="rounded-md bg-sky-50 px-2 py-0.5 text-[11px] font-medium text-sky-700"
+                  >
+                    {nd}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-ink-600">
+                <span className="font-medium text-ink-800">実案件での用途: </span>
+                {w.use}
+              </p>
+              <a
+                href={`/integrations/${w.file}`}
+                download
+                className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-ink-700/20 bg-white px-3 py-2 text-xs font-medium text-ink-800 transition-colors hover:bg-zinc-50"
+              >
+                ↓ {w.file} をダウンロード（n8nにインポート）
+              </a>
+            </Card>
+          ))}
+        </div>
+        <p className="mt-6 text-sm leading-relaxed text-ink-600">
+          <span className="font-medium text-ink-800">扱える n8n ノード / パターン：</span>
+          Webhook / HTTP Request / IF・Switch / 式(expression) / Schedule / Split Out / Filter / Merge / Wait(human-in-the-loop) / Error Trigger / Code / Google Sheets / Slack / Chatwork / CRM連携 …
+        </p>
+      </section>
 
       {/* artifacts */}
       <div className="mt-12 space-y-12">
