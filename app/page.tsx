@@ -3,12 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Eyebrow, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { WebGLBackground } from "@/components/ui/webgl-background";
-import {
-  APP_ROLE,
-  APP_SUBTAGLINE,
-  AUTHOR_EMAIL,
-  AUTHOR_NAME,
-} from "@/lib/constants";
+import { APP_ROLE, AUTHOR_EMAIL, AUTHOR_NAME } from "@/lib/constants";
 
 const CAPABILITIES = [
   {
@@ -128,41 +123,51 @@ export default function HomePage() {
 
         <div className="container-page relative py-28 sm:py-40">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white/70 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-sky-700 shadow-sm backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-sky-700 shadow-sm backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.9)]" />
-              {APP_ROLE}
+              制作会社・広告代理店・AI導入支援会社の 下請け実装パートナー
             </span>
             <h1 className="mt-6 text-balance text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl lg:text-[3.75rem] lg:leading-[1.08]">
-              問い合わせ対応・営業リード管理を
+              問い合わせ対応・営業リード管理の
               <br className="hidden sm:block" />
-              <span className="text-gradient-blue">AIで自動化</span>
+              <span className="text-gradient-blue">AI自動化を、下請けで実装</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink-600 sm:text-lg">
-              {APP_SUBTAGLINE}
+              御社のクライアント向けの「問い合わせ対応・営業リード管理のAI自動化」を、
+              <span className="font-medium text-ink-950">
+                n8n / Dify / GAS / Claude 等で下請け実装
+              </span>
+              します。設計から実装・外部連携・運用まで巻き取ります。
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <ButtonLink
-                href="/demo/inquiry"
+                href="/integrations"
                 size="lg"
                 className="border-transparent bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-xl shadow-blue-500/30 hover:from-blue-500 hover:to-cyan-400"
               >
-                デモを開始する
+                実装サンプルを見る
               </ButtonLink>
               <ButtonLink
-                href="/dashboard"
+                href="/contact"
                 size="lg"
                 variant="secondary"
                 className="border-sky-200 bg-white/70 text-ink-900 backdrop-blur hover:bg-white"
               >
-                管理画面を見る
+                下請けの相談をする
               </ButtonLink>
             </div>
             <p className="mt-7 text-sm text-ink-600">
-              AIで文章を作るだけではなく、
+              「作れます」ではなく、
               <span className="font-medium text-ink-950">
-                問い合わせ対応から営業管理、通知、レポート化まで、実務フローとして動く形に実装します。
+                実際に作って動かしたワークフローとコードを公開
               </span>
+              しています。
             </p>
+            <div className="mt-3">
+              <ButtonLink href="/demo/inquiry" variant="ghost" size="sm">
+                AIデモを触ってみる →
+              </ButtonLink>
+            </div>
           </div>
 
           {/* Inline flow strip */}

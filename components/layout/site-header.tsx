@@ -50,12 +50,12 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <ButtonLink
-            href="/demo/inquiry"
+            href="/contact"
             size="sm"
             variant="primary"
             className="hidden sm:inline-flex"
           >
-            デモを試す
+            下請けの相談
           </ButtonLink>
           {/* モバイル: ハンバーガー */}
           <button
@@ -103,8 +103,8 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <ButtonLink href="/demo/inquiry" size="md" className="mt-2 w-full">
-              デモを試す
+            <ButtonLink href="/contact" size="md" className="mt-2 w-full">
+              下請けの相談
             </ButtonLink>
           </div>
         </nav>
