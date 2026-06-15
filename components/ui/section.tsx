@@ -10,10 +10,11 @@ export function Eyebrow({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-ink-700/15 bg-white px-3 py-1 text-xs font-medium uppercase tracking-wider text-ink-600",
+        "inline-flex items-center gap-2 rounded-full border border-sky-200/70 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-sky-700 shadow-sm backdrop-blur",
         className
       )}
     >
+      <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" />
       {children}
     </span>
   );
@@ -40,7 +41,7 @@ export function SectionHeading({
       )}
     >
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-      <h2 className="mt-3 text-balance text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl">
+      <h2 className="mt-3 text-balance bg-gradient-to-br from-ink-950 via-blue-700 to-cyan-500 bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-3xl">
         {title}
       </h2>
       {description && (

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteBackground } from "@/components/layout/site-background";
 
 export const metadata: Metadata = {
   title: {
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className="min-h-screen antialiased">
+        <SiteBackground />
         <SiteHeader />
         <main className="min-h-[60vh]">{children}</main>
         <SiteFooter />

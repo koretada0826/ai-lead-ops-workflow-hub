@@ -1,10 +1,11 @@
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Eyebrow, SectionHeading } from "@/components/ui/section";
+import { Reveal } from "@/components/ui/reveal";
+import { WebGLBackground } from "@/components/ui/webgl-background";
 import {
   APP_ROLE,
   APP_SUBTAGLINE,
-  APP_TAGLINE,
   AUTHOR_EMAIL,
   AUTHOR_NAME,
 } from "@/lib/constants";
@@ -121,27 +122,42 @@ const INDUSTRIES = [
 export default function HomePage() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-ink-700/10">
-        <div className="hero-grid absolute inset-0 opacity-70" />
-        <div className="container-page relative py-20 sm:py-28">
+      {/* Hero（背景はサイト共通の SiteBackground が描画） */}
+      <section className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.6)_0%,transparent_60%)]" />
+
+        <div className="container-page relative py-28 sm:py-40">
           <div className="mx-auto max-w-3xl text-center">
-            <Eyebrow>{APP_ROLE}</Eyebrow>
-            <h1 className="mt-5 text-balance text-4xl font-semibold tracking-tight text-ink-950 sm:text-5xl lg:text-6xl">
-              {APP_TAGLINE}
+            <span className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white/70 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-sky-700 shadow-sm backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.9)]" />
+              {APP_ROLE}
+            </span>
+            <h1 className="mt-6 text-balance text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl lg:text-[3.75rem] lg:leading-[1.08]">
+              問い合わせ対応・営業リード管理を
+              <br className="hidden sm:block" />
+              <span className="text-gradient-blue">AIで自動化</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-ink-600 sm:text-lg">
+            <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink-600 sm:text-lg">
               {APP_SUBTAGLINE}
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <ButtonLink href="/demo/inquiry" size="lg">
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              <ButtonLink
+                href="/demo/inquiry"
+                size="lg"
+                className="border-transparent bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-xl shadow-blue-500/30 hover:from-blue-500 hover:to-cyan-400"
+              >
                 デモを開始する
               </ButtonLink>
-              <ButtonLink href="/dashboard" size="lg" variant="secondary">
+              <ButtonLink
+                href="/dashboard"
+                size="lg"
+                variant="secondary"
+                className="border-sky-200 bg-white/70 text-ink-900 backdrop-blur hover:bg-white"
+              >
                 管理画面を見る
               </ButtonLink>
             </div>
-            <p className="mt-5 text-sm text-ink-600">
+            <p className="mt-7 text-sm text-ink-600">
               AIで文章を作るだけではなく、
               <span className="font-medium text-ink-950">
                 問い合わせ対応から営業管理、通知、レポート化まで、実務フローとして動く形に実装します。
@@ -150,14 +166,14 @@ export default function HomePage() {
           </div>
 
           {/* Inline flow strip */}
-          <div className="mx-auto mt-14 flex max-w-5xl flex-wrap items-center justify-center gap-2 text-xs">
+          <div className="mx-auto mt-16 flex max-w-5xl flex-wrap items-center justify-center gap-2 text-xs">
             {FLOW.map((step, i) => (
               <span key={step} className="flex items-center gap-2">
-                <span className="rounded-full border border-ink-700/15 bg-white px-3 py-1.5 font-medium text-ink-700 shadow-sm">
+                <span className="rounded-full border border-sky-100 bg-white/70 px-3 py-1.5 font-medium text-ink-700 shadow-sm backdrop-blur">
                   {step}
                 </span>
                 {i < FLOW.length - 1 && (
-                  <span className="text-ink-600/40">→</span>
+                  <span className="text-sky-300">→</span>
                 )}
               </span>
             ))}
@@ -214,18 +230,26 @@ export default function HomePage() {
           description="単体のAIツールではなく、問い合わせ受付から通知・保存・レポートまでを一気通貫で実装します。"
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {CAPABILITIES.map((c) => (
-            <Card key={c.title} className="p-6 transition-shadow hover:shadow-card-hover">
-              <span className="text-[11px] font-medium uppercase tracking-wider text-ink-600">
-                {c.tag}
-              </span>
-              <h3 className="mt-2 text-base font-semibold text-ink-950">
-                {c.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-600">
-                {c.body}
-              </p>
-            </Card>
+          {CAPABILITIES.map((c, i) => (
+            <Reveal key={c.title} delay={i * 60} className="h-full">
+              <Card className="relative h-full overflow-hidden border-white/10 bg-gradient-to-br from-[#0b1430] to-[#0a1f44] p-6 text-white ring-1 ring-white/10 backdrop-blur-none shadow-[0_24px_70px_-22px_rgba(2,8,30,0.7)] hover:-translate-y-2 hover:ring-cyan-400/50 hover:shadow-[0_40px_100px_-24px_rgba(34,211,238,0.6)]">
+                {/* 常時表示のグラデ冠 */}
+                <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
+                {/* コーナーグロー（常時うっすら→ホバーで強く） */}
+                <span className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-400/40 opacity-50 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+                {/* グレア（光沢）スイープ */}
+                <span className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-white/25 opacity-0 blur-md transition-all duration-700 ease-out group-hover:left-[130%] group-hover:opacity-100" />
+                <span className="relative inline-block rounded-md border border-cyan-300/20 bg-white/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-cyan-200">
+                  {c.tag}
+                </span>
+                <h3 className="relative mt-3 text-base font-semibold text-white transition-colors group-hover:text-cyan-300">
+                  {c.title}
+                </h3>
+                <p className="relative mt-2 text-sm leading-relaxed text-white/70">
+                  {c.body}
+                </p>
+              </Card>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -257,7 +281,9 @@ export default function HomePage() {
       {/* 実装サンプル / レポート 訴求 */}
       <section className="container-page py-12">
         <div className="grid gap-4 lg:grid-cols-2">
-          <Card className="overflow-hidden">
+          <Reveal className="h-full">
+          <Card className="relative h-full overflow-hidden hover:-translate-y-1.5 hover:ring-sky-300/60">
+            <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
             <div className="p-7">
               <Eyebrow>連携・実装サンプル</Eyebrow>
               <h3 className="mt-3 text-xl font-semibold text-ink-950">
@@ -285,8 +311,11 @@ export default function HomePage() {
               </div>
             </div>
           </Card>
+          </Reveal>
 
-          <Card className="overflow-hidden">
+          <Reveal delay={120} className="h-full">
+          <Card className="relative h-full overflow-hidden hover:-translate-y-1.5 hover:ring-sky-300/60">
+            <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
             <div className="p-7">
               <Eyebrow>レポート自動化</Eyebrow>
               <h3 className="mt-3 text-xl font-semibold text-ink-950">
@@ -314,6 +343,7 @@ export default function HomePage() {
               </div>
             </div>
           </Card>
+          </Reveal>
         </div>
       </section>
 
@@ -325,13 +355,19 @@ export default function HomePage() {
           description="提案や獲得はそのまま、実際に動くワークフローの実装・連携・保守を担当します。"
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {PARTNER_RANGE.map((p) => (
-            <Card key={p.title} className="p-6">
-              <h3 className="text-base font-semibold text-ink-950">{p.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-600">
-                {p.body}
-              </p>
-            </Card>
+          {PARTNER_RANGE.map((p, i) => (
+            <Reveal key={p.title} delay={i * 80} className="h-full">
+              <Card className="relative h-full overflow-hidden border-white/10 bg-gradient-to-br from-[#0b1430] to-[#0a1f44] p-6 text-white ring-1 ring-white/10 backdrop-blur-none shadow-[0_24px_70px_-22px_rgba(2,8,30,0.7)] hover:-translate-y-1.5 hover:ring-cyan-400/50 hover:shadow-[0_38px_95px_-24px_rgba(34,211,238,0.5)]">
+                <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
+                <span className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-white/25 opacity-0 blur-md transition-all duration-700 ease-out group-hover:left-[130%] group-hover:opacity-100" />
+                <h3 className="relative text-base font-semibold text-white transition-colors group-hover:text-cyan-300">
+                  {p.title}
+                </h3>
+                <p className="relative mt-2 text-sm leading-relaxed text-white/70">
+                  {p.body}
+                </p>
+              </Card>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -419,7 +455,8 @@ export default function HomePage() {
       {/* CTA */}
       <section className="container-page py-16">
         <div className="hero-dark relative overflow-hidden rounded-3xl px-8 py-14 text-center sm:px-12">
-          <div className="bg-dots absolute inset-0 opacity-40" />
+          <WebGLBackground className="pointer-events-none absolute inset-0 h-full w-full opacity-80" />
+          <div className="bg-dots pointer-events-none absolute inset-0 opacity-25" />
           <div className="relative mx-auto max-w-2xl">
             <h2 className="text-balance text-3xl font-semibold tracking-tight text-white">
               まずはデモで、AIが問い合わせをどう整理するか試してください
