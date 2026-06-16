@@ -63,7 +63,7 @@ export interface AnalysisResult {
 }
 
 /** AI分析がどのエンジンで行われたか */
-export type AnalysisEngine = "claude" | "openai" | "mock";
+export type AnalysisEngine = "claude" | "openai" | "gemini" | "mock";
 
 /** Supabase `inquiries` テーブルに対応するレコード */
 export interface Inquiry extends AnalyzeInput, AnalysisResult {

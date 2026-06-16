@@ -21,9 +21,11 @@ export default function DemoInquiryPage() {
   const engineLabel =
     cfg.aiEngine === "claude"
       ? "Claude API"
-      : cfg.aiEngine === "openai"
-        ? "OpenAI API"
-        : "デモモード（モックAI）";
+      : cfg.aiEngine === "gemini"
+        ? "Gemini API"
+        : cfg.aiEngine === "openai"
+          ? "OpenAI API"
+          : "デモモード（モックAI）";
 
   return (
     <div className="container-page py-12 sm:py-16">

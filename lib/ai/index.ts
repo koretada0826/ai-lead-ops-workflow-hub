@@ -3,6 +3,7 @@ import { getRuntimeConfig } from "../constants";
 import { mockAnalyze } from "./mock";
 import { analyzeWithClaude } from "./claude";
 import { analyzeWithOpenAI } from "./openai";
+import { analyzeWithGemini } from "./gemini";
 
 export interface AnalyzeOutcome {
   result: AnalysisResult;
@@ -32,6 +33,9 @@ export async function analyzeInquiry(
     }
     if (aiEngine === "openai") {
       return { result: await analyzeWithOpenAI(input), engine: "openai" };
+    }
+    if (aiEngine === "gemini") {
+      return { result: await analyzeWithGemini(input), engine: "gemini" };
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

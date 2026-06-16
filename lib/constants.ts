@@ -65,17 +65,21 @@ export function getRuntimeConfig() {
   const provider = (process.env.AI_PROVIDER || "mock").toLowerCase();
   const hasClaude = !!process.env.ANTHROPIC_API_KEY;
   const hasOpenAI = !!process.env.OPENAI_API_KEY;
+  const hasGemini = !!process.env.GEMINI_API_KEY;
   const hasN8n = !!process.env.N8N_WEBHOOK_URL;
   const hasDify = !!process.env.DIFY_API_KEY;
 
-  let aiEngine: "claude" | "openai" | "mock" = "mock";
+  let aiEngine: "claude" | "openai" | "gemini" | "mock" = "mock";
   if (provider === "claude" && hasClaude) aiEngine = "claude";
   else if (provider === "openai" && hasOpenAI) aiEngine = "openai";
+  else if (provider === "gemini" && hasGemini) aiEngine = "gemini";
   else if (provider === "mock") aiEngine = "mock";
+  // プロバイダ未指定でもキーがあれば自動採用（無料のGeminiを優先）
+  else if (hasGemini) aiEngine = "gemini";
   else if (hasClaude) aiEngine = "claude";
   else if (hasOpenAI) aiEngine = "openai";
 
-  return { hasSupabase, hasN8n, hasDify, aiEngine, provider };
+  return { hasSupabase, hasN8n, hasDify, hasGemini, aiEngine, provider };
 }
 
 export const AUTHOR_NAME = "koretada.i";
