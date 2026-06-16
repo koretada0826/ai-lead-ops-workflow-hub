@@ -26,7 +26,7 @@ export async function analyzeWithGemini(
   input: AnalyzeInput
 ): Promise<AnalysisResult> {
   const apiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   const res = await fetch(url, {
@@ -56,7 +56,7 @@ export async function analyzeWithGemini(
 
   if (!res.ok) {
     const detail = await res.text().catch(() => "");
-    throw new Error(`Gemini API error ${res.status}: ${detail.slice(0, 200)}`);
+    throw new Error(`Gemini API error ${res.status}: ${detail.slice(0, 500)}`);
   }
 
   const data = (await res.json()) as {
