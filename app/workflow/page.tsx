@@ -92,7 +92,7 @@ const NODES: FlowNodeData[] = [
   {
     step: 11,
     title: "レポート化",
-    tools: ["ダッシュボード", "GAS", "Looker"],
+    tools: ["ダッシュボード", "GAS"],
     role: "流入元・カテゴリ・見込み度別に集計し可視化する。",
     example: "月次で問い合わせ傾向と商談化率をレポート自動生成。",
     group: "notify",
