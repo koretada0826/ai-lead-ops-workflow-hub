@@ -22,6 +22,8 @@ function extractJson(text: string): unknown {
  * 無料枠（Google AI Studioのキー）で動かせるため、デモ用途のコストを¥0にできる。
  * 軽量に保つため公式SDKではなく fetch を使用。
  */
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 export async function analyzeWithGemini(
   input: AnalyzeInput
 ): Promise<AnalysisResult> {
@@ -29,43 +31,56 @@ export async function analyzeWithGemini(
   const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              text:
-                buildUserPrompt(input) +
-                "\n\n上記をJSONオブジェクトのみで返してください。説明文やMarkdownは不要です。",
-            },
-          ],
-        },
-      ],
-      // JSONのみを返すよう明示（Geminiの構造化出力）
-      generationConfig: {
-        responseMimeType: "application/json",
-        maxOutputTokens: 2000,
+  const requestBody = JSON.stringify({
+    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+    contents: [
+      {
+        role: "user",
+        parts: [
+          {
+            text:
+              buildUserPrompt(input) +
+              "\n\n上記をJSONオブジェクトのみで返してください。説明文やMarkdownは不要です。",
+          },
+        ],
       },
-    }),
+    ],
+    // JSONのみを返すよう明示（Geminiの構造化出力）
+    generationConfig: {
+      responseMimeType: "application/json",
+      maxOutputTokens: 2000,
+    },
   });
 
-  if (!res.ok) {
+  // 無料枠は一時的な 429/503（混雑）を返すことがあるため、指数バックオフで数回リトライ。
+  const MAX_ATTEMPTS = 4;
+  let lastError = "";
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: requestBody,
+    });
+
+    if (res.ok) {
+      const data = (await res.json()) as {
+        candidates?: { content?: { parts?: { text?: string }[] } }[];
+      };
+      const text =
+        data.candidates?.[0]?.content?.parts
+          ?.map((p) => p.text ?? "")
+          .join("") ?? "";
+      return coerceAnalysis(extractJson(text));
+    }
+
     const detail = await res.text().catch(() => "");
-    throw new Error(`Gemini API error ${res.status}: ${detail.slice(0, 500)}`);
+    lastError = `Gemini API error ${res.status}: ${detail.slice(0, 500)}`;
+
+    // 一時的なエラー(429/503)のみリトライ。それ以外（認証など）は即座に失敗。
+    const isTransient = res.status === 429 || res.status === 503;
+    if (!isTransient || attempt === MAX_ATTEMPTS) break;
+    await sleep(600 * attempt); // 600ms, 1200ms, 1800ms
   }
 
-  const data = (await res.json()) as {
-    candidates?: { content?: { parts?: { text?: string }[] } }[];
-  };
-  const text =
-    data.candidates?.[0]?.content?.parts
-      ?.map((p) => p.text ?? "")
-      .join("") ?? "";
-
-  return coerceAnalysis(extractJson(text));
+  throw new Error(lastError);
 }
