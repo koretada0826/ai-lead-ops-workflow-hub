@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { analyzeInquiry } from "@/lib/ai";
 import { addLog, createInquiry, listInquiries, updateInquiry } from "@/lib/repository";
 import { sendToN8n } from "@/lib/n8n";
+import { rateLimit } from "@/lib/rate-limit";
 import type { AnalyzeInput } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -37,6 +38,17 @@ export async function GET() {
  * 1) AI分析  2) Supabase保存  3) n8n Webhook送信  4) workflow_logs記録
  */
 export async function POST(req: Request) {
+  // レート制限：公開デモでのAI API濫用（課金暴走）を防ぐ保険。
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const rl = rateLimit(`inquiry:${ip}`);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: `リクエストが多すぎます。${rl.retryAfter}秒後に再度お試しください。` },
+      { status: 429 }
+    );
+  }
+
   let body: Record<string, unknown>;
   try {
     body = await req.json();

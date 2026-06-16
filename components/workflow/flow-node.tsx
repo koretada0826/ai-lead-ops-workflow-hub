@@ -9,10 +9,11 @@ export interface FlowNodeData {
   group: "core" | "notify" | "extend";
 }
 
-const GROUP_STYLE: Record<FlowNodeData["group"], string> = {
-  core: "border-ink-700/15 bg-white",
-  notify: "border-blue-200 bg-blue-50/40",
-  extend: "border-violet-200 bg-violet-50/30",
+// カテゴリは「色のアクセント」として残しつつ、カード自体はサイト共通のダーク調に統一
+const GROUP_ACCENT: Record<FlowNodeData["group"], string> = {
+  core: "from-blue-500 to-cyan-400",
+  notify: "from-sky-400 to-blue-500",
+  extend: "from-violet-500 to-fuchsia-500",
 };
 
 const GROUP_LABEL: Record<FlowNodeData["group"], string> = {
@@ -22,45 +23,52 @@ const GROUP_LABEL: Record<FlowNodeData["group"], string> = {
 };
 
 const GROUP_DOT: Record<FlowNodeData["group"], string> = {
-  core: "bg-ink-800",
-  notify: "bg-blue-500",
-  extend: "bg-violet-500",
+  core: "bg-cyan-400",
+  notify: "bg-sky-400",
+  extend: "bg-violet-400",
 };
 
 export function FlowNode({ node }: { node: FlowNodeData }) {
   return (
-    <div
-      className={cn(
-        "relative rounded-2xl border p-5 shadow-card transition-shadow hover:shadow-card-hover",
-        GROUP_STYLE[node.group]
-      )}
-    >
+    <div className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b1430] to-[#0a1f44] p-5 shadow-[0_24px_70px_-22px_rgba(2,8,30,0.7)] ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-1.5 hover:ring-cyan-400/50 hover:shadow-[0_38px_95px_-24px_rgba(34,211,238,0.5)]">
+      {/* カテゴリ色のグラデ冠 */}
+      <span
+        className={cn(
+          "absolute inset-x-0 top-0 h-1 bg-gradient-to-r",
+          GROUP_ACCENT[node.group]
+        )}
+      />
       <div className="flex items-center justify-between">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ink-950 text-xs font-bold text-white">
+        <span
+          className={cn(
+            "flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br text-xs font-bold text-white shadow-lg",
+            GROUP_ACCENT[node.group]
+          )}
+        >
           {node.step}
         </span>
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-ink-600">
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-white/60">
           <span className={cn("h-1.5 w-1.5 rounded-full", GROUP_DOT[node.group])} />
           {GROUP_LABEL[node.group]}
         </span>
       </div>
-      <h3 className="mt-3 text-sm font-semibold text-ink-950">{node.title}</h3>
+      <h3 className="mt-3 text-sm font-semibold text-white">{node.title}</h3>
       <div className="mt-2 flex flex-wrap gap-1.5">
         {node.tools.map((t) => (
           <span
             key={t}
-            className="rounded-md border border-ink-700/12 bg-white px-2 py-0.5 text-[11px] font-medium text-ink-700"
+            className="rounded-md border border-white/10 bg-white/10 px-2 py-0.5 text-[11px] font-medium text-cyan-100"
           >
             {t}
           </span>
         ))}
       </div>
-      <p className="mt-3 text-xs leading-relaxed text-ink-600">
-        <span className="font-medium text-ink-800">役割: </span>
+      <p className="mt-3 text-xs leading-relaxed text-white/65">
+        <span className="font-medium text-white/90">役割: </span>
         {node.role}
       </p>
-      <p className="mt-1.5 text-xs leading-relaxed text-ink-600">
-        <span className="font-medium text-ink-800">実案件例: </span>
+      <p className="mt-1.5 text-xs leading-relaxed text-white/65">
+        <span className="font-medium text-white/90">実案件例: </span>
         {node.example}
       </p>
     </div>

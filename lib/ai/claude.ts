@@ -23,7 +23,9 @@ export async function analyzeWithClaude(
   input: AnalyzeInput
 ): Promise<AnalysisResult> {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const model = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
+  // デモ用途はコスト最優先で安価なHaikuを既定に（問い合わせ分類なら精度十分）。
+  // 高精度が要る本番は ANTHROPIC_MODEL で上位モデルに差し替え可能。
+  const model = process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001";
 
   const response = await client.messages.create({
     model,
