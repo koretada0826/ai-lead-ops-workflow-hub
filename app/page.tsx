@@ -188,43 +188,65 @@ export default function HomePage() {
 
       {/* 思想 */}
       <section className="container-page py-16">
-        <Card className="overflow-hidden">
-          <div className="grid gap-8 p-8 sm:p-10 lg:grid-cols-2 lg:items-center">
-            <div>
-              <Eyebrow>重要な思想</Eyebrow>
-              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink-950">
-                これは「問い合わせを増やす」サービスではありません。
-              </h2>
-              <p className="mt-4 text-base leading-relaxed text-ink-600">
-                来た問い合わせを
-                <span className="font-medium text-ink-950">
-                  早く・漏れなく・商談化しやすく
+        <Reveal>
+          <div className="gradient-frame spotlight-panel relative overflow-hidden rounded-3xl shadow-[0_40px_120px_-30px_rgba(8,20,60,0.75)]">
+            {/* 浮遊する発光オーブ */}
+            <span className="animate-floaty pointer-events-none absolute -left-16 -top-20 h-64 w-64 rounded-full bg-cyan-400/25 blur-3xl" />
+            <span className="animate-blob pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-indigo-500/25 blur-3xl" />
+            <span className="bg-dots pointer-events-none absolute inset-0 opacity-30" />
+            {/* 上端のグラデ冠 */}
+            <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
+
+            <div className="relative grid gap-10 p-8 sm:p-12 lg:grid-cols-2 lg:items-center">
+              <div>
+                <span className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-cyan-200 backdrop-blur">
+                  <span className="animate-pulse-glow h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.9)]" />
+                  重要な思想
                 </span>
-                処理するためのAIリード対応ワークフローです。広告やSEOで獲得したリードの取りこぼしを防ぎ、営業担当がすぐ動ける状態にします。
-              </p>
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { k: "初動", v: "即時", d: "高見込みは当日対応" },
-                { k: "取りこぼし", v: "削減", d: "漏れを仕組みで防ぐ" },
-                { k: "商談化", v: "向上", d: "文案まで自動生成" },
-              ].map((s) => (
-                <div
-                  key={s.k}
-                  className="rounded-xl border border-ink-700/12 bg-zinc-50 p-4 text-center"
-                >
-                  <p className="text-xs text-ink-600">{s.k}</p>
-                  <p className="mt-1 text-xl font-semibold text-ink-950">
-                    {s.v}
-                  </p>
-                  <p className="mt-1 text-[11px] leading-tight text-ink-600">
-                    {s.d}
-                  </p>
-                </div>
-              ))}
+                <h2 className="mt-4 text-balance text-2xl font-bold leading-snug tracking-tight text-white sm:text-3xl">
+                  これは「問い合わせを増やす」
+                  <br className="hidden sm:block" />
+                  サービスでは
+                  <span className="bg-gradient-to-r from-cyan-300 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
+                    ありません。
+                  </span>
+                </h2>
+                <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70">
+                  来た問い合わせを
+                  <span className="font-semibold text-white">
+                    早く・漏れなく・商談化しやすく
+                  </span>
+                  処理するためのAIリード対応ワークフローです。広告やSEOで獲得したリードの取りこぼしを防ぎ、営業担当がすぐ動ける状態にします。
+                </p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                {[
+                  { k: "初動", v: "即時", d: "高見込みは当日対応" },
+                  { k: "取りこぼし", v: "削減", d: "漏れを仕組みで防ぐ" },
+                  { k: "商談化", v: "向上", d: "文案まで自動生成" },
+                ].map((s, i) => (
+                  <Reveal key={s.k} delay={150 + i * 110}>
+                    <div className="group/stat relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-4 text-center backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan-300/40 hover:bg-white/[0.1]">
+                      <span className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
+                      {/* ホバーで光が走る */}
+                      <span className="pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-white/20 opacity-0 blur-md transition-opacity duration-300 group-hover/stat:animate-[sheen_1.1s_ease-out] group-hover/stat:opacity-100" />
+                      <p className="relative text-[11px] font-medium text-white/55">
+                        {s.k}
+                      </p>
+                      <p className="relative mt-1 bg-gradient-to-br from-white via-cyan-200 to-sky-300 bg-clip-text text-2xl font-bold text-transparent">
+                        {s.v}
+                      </p>
+                      <p className="relative mt-1.5 text-[10px] leading-tight text-white/55">
+                        {s.d}
+                      </p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
             </div>
           </div>
-        </Card>
+        </Reveal>
       </section>
 
       {/* できること */}
@@ -267,13 +289,13 @@ export default function HomePage() {
           description="ノーコード/ローコードからAIエージェント、ブラウザ自動化まで。要件に応じて最適な組み合わせで実装します。"
         />
         <div className="mt-8 flex flex-wrap gap-2.5">
-          {STACK.map((s) => (
-            <span
-              key={s}
-              className="rounded-xl border border-ink-700/15 bg-white px-4 py-2 text-sm font-medium text-ink-800 shadow-sm"
-            >
-              {s}
-            </span>
+          {STACK.map((s, i) => (
+            <Reveal key={s} delay={i * 35}>
+              <span className="group/chip relative inline-flex cursor-default items-center overflow-hidden rounded-xl border border-sky-100 bg-white px-4 py-2 text-sm font-medium text-ink-800 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/60 hover:text-blue-700 hover:shadow-[0_12px_30px_-12px_rgba(37,99,235,0.5)]">
+                <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/0 to-cyan-400/0 transition-colors duration-300 group-hover/chip:from-blue-500/[0.08] group-hover/chip:to-cyan-400/[0.12]" />
+                <span className="relative">{s}</span>
+              </span>
+            </Reveal>
           ))}
         </div>
         <div className="mt-6">
@@ -353,13 +375,13 @@ export default function HomePage() {
           title="問い合わせ・反響対応がある業種に広く適用"
         />
         <div className="mt-8 flex flex-wrap gap-2.5">
-          {INDUSTRIES.map((i) => (
-            <span
-              key={i}
-              className="rounded-full border border-ink-700/15 bg-zinc-50 px-4 py-1.5 text-sm text-ink-700"
-            >
-              {i}
-            </span>
+          {INDUSTRIES.map((name, i) => (
+            <Reveal key={name} delay={i * 35}>
+              <span className="group/chip relative inline-flex cursor-default items-center gap-1.5 rounded-full border border-sky-100 bg-white/80 px-4 py-1.5 text-sm text-ink-700 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/60 hover:bg-white hover:text-blue-700 hover:shadow-[0_10px_26px_-12px_rgba(37,99,235,0.5)]">
+                <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-transform duration-300 group-hover/chip:scale-150" />
+                {name}
+              </span>
+            </Reveal>
           ))}
         </div>
         <div className="mt-6">
@@ -371,8 +393,10 @@ export default function HomePage() {
 
       {/* About the maker */}
       <section className="container-page py-12">
-        <Card className="overflow-hidden">
-          <div className="grid gap-8 p-8 sm:p-10 lg:grid-cols-3 lg:items-center">
+        <Reveal>
+        <Card className="gradient-frame overflow-hidden">
+          <span className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-300/20 blur-3xl" />
+          <div className="relative grid gap-8 p-8 sm:p-10 lg:grid-cols-3 lg:items-center">
             <div className="lg:col-span-2">
               <Eyebrow>このサイトについて</Eyebrow>
               <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink-950">
@@ -405,25 +429,32 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl border border-ink-700/12 bg-zinc-50 p-6">
-              <p className="text-xs font-medium uppercase tracking-wide text-ink-600">
+            <div className="spotlight-panel relative overflow-hidden rounded-2xl p-6 shadow-[0_24px_60px_-24px_rgba(8,20,60,0.7)]">
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500" />
+              <span className="animate-floaty pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-cyan-400/30 blur-2xl" />
+              <p className="relative text-xs font-semibold uppercase tracking-wide text-cyan-200">
                 お仕事のご相談
               </p>
-              <p className="mt-2 text-sm leading-relaxed text-ink-800">
+              <p className="relative mt-2 text-sm leading-relaxed text-white/75">
                 n8n・AIワークフローの受託 / 下請け実装、お気軽にどうぞ。
               </p>
               <a
                 href={`mailto:${AUTHOR_EMAIL}`}
-                className="mt-4 block break-all text-sm font-medium text-ink-950 underline underline-offset-4 hover:text-ink-600"
+                className="relative mt-4 block break-all text-sm font-medium text-cyan-200 underline underline-offset-4 transition-colors hover:text-white"
               >
                 {AUTHOR_EMAIL}
               </a>
-              <ButtonLink href="/contact" size="sm" className="mt-4 w-full">
+              <ButtonLink
+                href="/contact"
+                size="sm"
+                className="relative mt-4 w-full border-transparent bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/30 hover:from-blue-500 hover:to-cyan-400"
+              >
                 問い合わせフォームへ
               </ButtonLink>
             </div>
           </div>
         </Card>
+        </Reveal>
       </section>
 
       {/* CTA */}
